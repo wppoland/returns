@@ -150,8 +150,9 @@ final class ReturnRequest implements HasHooks
             'no_found_rows'          => true,
             'update_post_meta_cache' => false,
             'update_post_term_cache' => false,
-            'meta_key'               => self::META_ORDER_ID,
-            'meta_value'             => (string) $orderId,
+            // Bounded lookup (1 row) on an indexed meta key — acceptable here.
+            'meta_key'               => self::META_ORDER_ID, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+            'meta_value'             => (string) $orderId, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
         ]);
 
         return [] !== $query->posts;
@@ -178,8 +179,9 @@ final class ReturnRequest implements HasHooks
             'update_post_term_cache' => false,
             'orderby'                => 'date',
             'order'                  => 'DESC',
-            'meta_key'               => self::META_CUSTOMER_ID,
-            'meta_value'             => (string) $customerId,
+            // A customer's own returns: a small, capped (50) result set.
+            'meta_key'               => self::META_CUSTOMER_ID, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+            'meta_value'             => (string) $customerId, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
         ]);
 
         /** @var list<int> $ids */
