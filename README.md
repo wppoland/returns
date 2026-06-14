@@ -1,40 +1,31 @@
 # Returns - RMA and Return Requests for WooCommerce
 
-Self-service returns (RMA) for WooCommerce. Customers open a return request from
-**My Account → Orders** on an eligible order — picking items, a quantity, a
-reason and an optional note. Each request is saved as a private custom post type
-linked to the order, emailed to the merchant, and managed in wp-admin through a
-status workflow (requested / approved / rejected / completed) the customer can
-follow from their account.
+Returns adds a simple, self-service return (RMA) flow to WooCommerce. From **My Account → Orders**, a customer opens a return request on an eligible order: they pick the items, set a quantity, choose a reason and add an optional note. The request is saved as a private record, emailed to you, and given a status the customer can follow from their account. You review and manage every request in wp-admin and move it through a clear workflow.
 
-This is the FREE, WordPress.org-bound plugin. It is **self-contained** — no
-runtime Composer dependencies. A premium add-on, **Returns Pro**, lives in a
-separate repository.
+## Features
 
-## Architecture
+- "Request a return" action on eligible orders in My Account (orders list and single order view).
+- Item picker with per-item quantity, a reason dropdown and an optional note.
+- Ownership-checked: only the logged-in owner of an order can request a return for it.
+- Configurable eligible order statuses and a return window in days.
+- Each request is saved as a private record and emailed to the merchant.
+- Admin management screen with a status workflow: requested, approved, rejected, completed.
+- Customer-facing status list in My Account so shoppers can track their returns.
 
-- `returns.php` — bootstrap: HPOS declaration, WooCommerce guard, boots on `init:0`.
-- `src/Plugin.php` — DI container boot; fires `do_action('returns/booted', $plugin)`.
-- `src/PostType/ReturnRequest.php` — the private `returns_rma` CPT, admin columns,
-  details + status meta boxes; fires `returns/status_changed` when status changes.
-- `src/Service/ReturnRequestForm.php` — the My Account `request-return` endpoint,
-  the item-picker form, and the ownership-checked submission handler.
-- `src/Service/MyReturns.php` — confirmation notice + the customer's status list.
-- `src/Admin/Settings.php` — the WooCommerce → Returns settings page.
-- `src/Support/` — `Options` (typed settings accessor) and `Statuses` (status labels).
+## Installation
 
-## Development
+1. Upload the plugin to `/wp-content/plugins/returns`, or install it via **Plugins → Add New**.
+2. Activate it. WooCommerce must be installed and active.
+3. Configure eligible order statuses and the return window under **WooCommerce → Returns**.
 
-```bash
-composer install
-composer cs        # PHPCS (WordPress security sniffs)
-composer analyse   # PHPStan level 6
-```
+## Frequently Asked Questions
 
-Plugin Check runs in CI via the reusable `wppoland/workflows` pipeline.
+**Does it process refunds?**
+No. Returns is a focused request-and-status flow; it does not move money. Process any refund in the normal WooCommerce order screen — the return record keeps the request and its status in one place.
 
-## Extensibility
+**Who can open a return request?**
+Only the logged-in owner of an order, and only on orders within the configured eligible statuses and return window.
 
-- `returns/booted` — fires after boot with the `Plugin` instance (PRO hooks here).
-- `returns/status_changed` — `($postId, $newStatus, $previousStatus)`.
-- `returns/reasons` — filter the list of selectable return reasons.
+Built by WPPoland — https://plogins.com
+
+License: GPL-2.0-or-later
