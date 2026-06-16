@@ -20,12 +20,14 @@ request is saved as a private record, emailed to you, and given a status the
 customer can follow from their account.
 
 You review and manage every request in wp-admin under **WooCommerce → Return
-Requests**, moving each one through a clear workflow — requested, approved,
-rejected or completed — with the customer always seeing the current status.
+Requests**, moving each one through requested, approved, rejected or completed.
+Whatever status you set is the status the customer sees in their account.
 
-This is a focused, request-and-status MVP: it does not move money. Process any
-refund in the normal WooCommerce order screen; the return record keeps the
-request and its status in one place.
+This is a request-and-status plugin: it does not move money. Process any refund
+in the normal WooCommerce order screen; the return record keeps the request and
+its status in one place.
+
+Source code and bug reports live at https://github.com/wppoland/returns.
 
 = Features =
 
@@ -36,7 +38,7 @@ request and its status in one place.
 * Each request is saved as a private custom post type and emailed to the store admin.
 * Admin management screen with a status workflow: requested, approved, rejected, completed.
 * Customer-facing status list in My Account so shoppers can track their returns.
-* Accessible, mobile-friendly, dark-mode-aware markup.
+* Accessible markup with a responsive layout; storefront styles inherit your theme's colours, so they sit in light or dark themes without extra work.
 * Translation ready (POT included) and clean uninstall.
 * HPOS and cart/checkout blocks compatible.
 
