@@ -52,4 +52,42 @@ final class Statuses
     {
         return self::isValid($status) ? $status : self::REQUESTED;
     }
+
+    /**
+     * The ordered waypoints a return travels through on its way back, with each
+     * step's state relative to the given current status. A rejected return
+     * forks off the path: the journey ends at the rejection marker.
+     *
+     * @return array<int, array{key: string, label: string, state: string}>
+     *               state is one of: done | current | upcoming
+     */
+    public static function journey(string $current): array
+    {
+        $current = self::slug($current);
+
+        if (self::REJECTED === $current) {
+            return [
+                ['key' => self::REQUESTED, 'label' => self::label(self::REQUESTED), 'state' => 'done'],
+                ['key' => self::REJECTED, 'label' => self::label(self::REJECTED), 'state' => 'current'],
+            ];
+        }
+
+        $path  = [self::REQUESTED, self::APPROVED, self::COMPLETED];
+        $index = array_search($current, $path, true);
+        $index = false === $index ? 0 : $index;
+
+        $steps = [];
+
+        foreach ($path as $position => $key) {
+            $state = $position < $index ? 'done' : ($position === $index ? 'current' : 'upcoming');
+
+            $steps[] = [
+                'key'   => $key,
+                'label' => self::label($key),
+                'state' => $state,
+            ];
+        }
+
+        return $steps;
+    }
 }

@@ -81,15 +81,52 @@ final class MyReturns implements HasHooks
                             <td data-title="<?php esc_attr_e('Order', 'returns'); ?>"><?php echo esc_html($orderId > 0 ? '#' . $orderId : '—'); ?></td>
                             <td data-title="<?php esc_attr_e('Date', 'returns'); ?>"><?php echo esc_html(is_string($date) ? $date : ''); ?></td>
                             <td data-title="<?php esc_attr_e('Status', 'returns'); ?>">
-                                <span class="returns-badge returns-badge--<?php echo esc_attr(Statuses::slug($status)); ?>">
-                                    <?php echo esc_html(Statuses::label($status)); ?>
-                                </span>
+                                <?php $this->renderJourney($status); ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
         </section>
+        <?php
+    }
+
+    /**
+     * Render a return's progress as a journey track — the parcel retracing its
+     * steps back to the shop. The current waypoint names the live status; the
+     * full ordered path is exposed to assistive tech as a single sentence.
+     */
+    private function renderJourney(string $status): void
+    {
+        $steps      = Statuses::journey($status);
+        $rejected   = Statuses::REJECTED === Statuses::slug($status);
+        $currentKey = '';
+
+        foreach ($steps as $step) {
+            if ('current' === $step['state']) {
+                $currentKey = $step['key'];
+            }
+        }
+
+        $summary = sprintf(
+            /* translators: %s: current return status, e.g. "Approved" */
+            __('Return status: %s', 'returns'),
+            Statuses::label($currentKey),
+        );
+        ?>
+        <ol class="returns-journey<?php echo $rejected ? ' is-rejected' : ''; ?>" aria-label="<?php echo esc_attr($summary); ?>">
+            <?php foreach ($steps as $step) :
+                $class = 'done' === $step['state']
+                    ? 'is-done'
+                    : ('current' === $step['state'] ? 'is-current' : '');
+                ?>
+                <li class="returns-journey__step <?php echo esc_attr($class); ?>"
+                    <?php echo 'current' === $step['state'] ? 'aria-current="step"' : ''; ?>>
+                    <span class="returns-journey__marker" aria-hidden="true"></span>
+                    <span class="returns-journey__label"><?php echo esc_html($step['label']); ?></span>
+                </li>
+            <?php endforeach; ?>
+        </ol>
         <?php
     }
 }
