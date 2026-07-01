@@ -1,4 +1,4 @@
-=== Plogins Returns for WooCommerce ===
+=== Plogins Returns - Returns and RMA for WooCommerce ===
 Contributors: motylanogha
 Tags: woocommerce, returns, rma, refund, return request
 Requires at least: 6.5

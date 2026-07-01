@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Plogins Returns for WooCommerce
+ * Plugin Name:       Plogins Returns - Returns and RMA for WooCommerce
  * Plugin URI:        https://plogins.com/plogins-returns/
  * Description:        Let customers request returns/refunds from their account and manage RMAs in the admin.
  * Version:           0.1.3
