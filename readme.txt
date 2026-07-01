@@ -85,6 +85,11 @@ Request" record under the WooCommerce menu in wp-admin.
 No. Once a return request exists for an order, the action is hidden and a notice
 is shown instead.
 
+
+= Does this plugin work on WordPress Multisite? =
+
+Yes. This plugin is compatible with WordPress Multisite. Network activate it or activate it on individual sites; each site keeps its own settings and data.
+
 == Screenshots ==
 
 1. The "Request a return" action on an order in My Account.
